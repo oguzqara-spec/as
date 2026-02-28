@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JustStudyDude - Student Productivity Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #4ade80;
+            --dark-green: #166534;
+            --light-green: #dcfce7;
+            --primary-yellow: #facc15;
+            --light-yellow: #fef9c3;
+            --cream: #fefce8;
+            --earth-brown: #92400e;
+            --soft-orange: #fb923c;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --white: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--light-green) 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape-1 {
+            top: 10%;
+            left: 10%;
+            width: 80px;
+            height: 80px;
+            background: var(--primary-green);
+            border-radius: 50%;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            top: 70%;
+            right: 10%;
+            width: 120px;
+            height: 120px;
+            background: var(--primary-yellow);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation-delay: 5s;
+        }
+
+        .shape-3 {
+            bottom: 20%;
+            left: 20%;
+            width: 60px;
+            height: 60px;
+            background: var(--soft-orange);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
+        }
+
+        /* Header */
+        header {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--primary-green);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--dark-green);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo i {
+            color: var(--primary-yellow);
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .coin-display {
+            background: linear-gradient(135deg, var(--primary-yellow), var(--soft-orange));
+            padding: 8px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            color: var(--earth-brown);
+            box-shadow: 0 4px 15px rgba(250, 204, 21, 0.4);
+            animation: pulse 2s infinite;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .coin-display:hover {
+            transform: translateY(-2px);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 4px 15px rgba(250, 204, 21, 0.4); }
+            50% { box-shadow: 0 6px 25px rgba(250, 204, 21, 0.6); }
+        }
+
+        .streak-display {
+            background: var(--light-green);
+            padding: 8px 16px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            color: var(--dark-green);
+            border: 2px solid var(--primary-green);
+        }
+
+        /* Navigation */
+        nav {
+            position: relative;
+            z-index: 10;
+            background: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            border: none;
+            background: transparent;
+            color: var(--text-light);
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--light-green), var(--light-yellow));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .nav-btn:hover::before, .nav-btn.active::before {
+            opacity: 1;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            color: var(--dark-green);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn i {
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        main {
+            position: relative;
+            z-index: 5;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--dark-green);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Todo Section */
+        .todo-container {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px var(--shadow);
+            border: 2px solid var(--light-green);
+        }
+
+        .add-task-form {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .task-input {
+            flex: 1;
+            padding: 16px 24px;
+            border: 3px solid var(--light-green);
+            border-radius: 16px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background: var(--cream);
+        }
+
+        .task-input:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .add-btn {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(22, 101, 52, 0.3);
+        }
+
+        .add-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(22, 101, 52, 0.4);
+        }
+
+        .add-btn:active {
+            transform: translateY(0);
+        }
+
+        .task-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .task-item {
+            background: var(--cream);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--primary-green);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .task-item:hover {
+            border-color: var(--primary-green);
+            transform: translateX(8px);
+            box-shadow: 0 4px 20px rgba(74, 222, 128, 0.2);
+        }
+
+        .task-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .task-item.completed {
+            opacity: 0.7;
+            background: var(--light-green);
+        }
+
+        .task-item.completed .task-title {
+            text-decoration: line-through;
+            color: var(--text-light);
+        }
+
+        .checkbox {
+            width: 28px;
+            height: 28px;
+            border: 3px solid var(--primary-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            flex-shrink: 0;
+        }
+
+        .checkbox:hover {
+            transform: scale(1.1);
+            background: var(--light-green);
+        }
+
+        .checkbox.checked {
+            background: var(--primary-green);
+            border-color: var(--dark-green);
+            animation: checkPop 0.4s ease;
+        }
+
+        @keyframes checkPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .checkbox.checked::after {
+            content: '✓';
+            color: white;
+            font-weight: 800;
+            font-size: 16px;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+            transition: color 0.3s ease;
+        }
+
+        .task-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .task-item.expanded .task-desc {
+            max-height: 200px;
+            opacity: 1;
+            margin-top: 8px;
+        }
+
+        .expand-icon {
+            color: var(--text-light);
+            transition: transform 0.3s ease;
+        }
+
+        .task-item.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .delete-btn {
+            background: transparent;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .task-item:hover .delete-btn {
+            opacity: 1;
+        }
+
+        .delete-btn:hover {
+            background: #fee2e2;
+            transform: scale(1.1);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Notes Section */
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .note-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 30px var(--shadow);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 200px;
+            border: 2px solid transparent;
+        }
+
+        .note-card:hover {
+            transform: translateY(-8px) rotate(1deg);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-green);
+        }
+
+        .note-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-green), var(--primary-yellow));
+        }
+
+        .note-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .note-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--dark-green);
+        }
+
+        .note-date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .note-content {
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .note-stickers {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            min-height: 40px;
+            padding: 8px;
+            background: var(--cream);
+            border-radius: 12px;
+            border: 2px dashed var(--primary-yellow);
+        }
+
+        .sticker {
+            font-size: 1.5rem;
+            cursor: move;
+            transition: transform 0.2s ease;
+            animation: stickerPop 0.4s ease;
+        }
+
+        @keyframes stickerPop {
+            0% { transform: scale(0) rotate(-180deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .sticker:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .add-note-btn {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-yellow));
+            border: none;
+            border-radius: 20px;
+            padding: 24px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: white;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            min-height: 200px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(74, 222, 128, 0.3);
+        }
+
+        .add-note-btn:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(74, 222, 128, 0.4);
+        }
+
+        .add-note-btn i {
+            font-size: 3rem;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 3px dashed var(--primary-green);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            background: var(--light-green);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 2rem;
+        }
+
+        .upload-area:hover, .upload-area.dragover {
+            background: var(--cream);
+            border-color: var(--dark-green);
+            transform: scale(1.02);
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--dark-green);
+            margin-bottom: 1rem;
+        }
+
+        .upload-area h3 {
+            color: var(--dark-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-area p {
+            color: var(--text-light);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Shop Section */
+        .shop-container {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px var(--shadow);
+        }
+
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--light-yellow);
+        }
+
+        .sticker-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .sticker-item {
+            background: linear-gradient(135deg, var(--cream), var(--light-yellow));
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 3px solid transparent;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sticker-item::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sticker-item:hover::after {
+            opacity: 1;
+        }
+
+        .sticker-item:hover {
+            transform: translateY(-8px) rotate(3deg);
+            border-color: var(--primary-yellow);
+            box-shadow: 0 12px 30px rgba(250, 204, 21, 0.3);
+        }
+
+        .sticker-item.owned {
+            opacity: 0.6;
+            border-color: var(--primary-green);
+            background: var(--light-green);
+        }
+
+        .sticker-emoji {
+            font-size: 4rem;
+            margin-bottom: 12px;
+            display: block;
+            animation: float 3s infinite ease-in-out;
+        }
+
+        .sticker-name {
+            font-weight: 700;
+            color: var(--earth-brown);
+            margin-bottom: 8px;
+        }
+
+        .sticker-price {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--primary-yellow);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            color: var(--earth-brown);
+            font-size: 0.9rem;
+        }
+
+        .sticker-item.owned .sticker-price {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 30px var(--shadow);
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--primary-green);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card.yellow { border-left-color: var(--primary-yellow); }
+        .stat-card.orange { border-left-color: var(--soft-orange); }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark-green);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: var(--light-green);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-green), var(--primary-yellow));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+            border: 3px solid var(--primary-green);
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--dark-green);
+            font-weight: 800;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--light-green);
+            color: var(--dark-green);
+            transform: rotate(90deg);
+        }
+
+        .sticker-selector {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 1rem;
+        }
+
+        .sticker-option {
+            font-size: 2rem;
+            padding: 12px;
+            background: var(--cream);
+            border: 3px solid transparent;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .sticker-option:hover {
+            border-color: var(--primary-yellow);
+            transform: scale(1.1);
+            background: var(--light-yellow);
+        }
+
+        /* Confetti Animation */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--primary-yellow);
+            position: absolute;
+            animation: confetti-fall 3s ease-out forwards;
+            z-index: 9999;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--dark-green);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(400px);
+            transition: transform 0.4s ease;
+            z-index: 2000;
+            font-weight: 600;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast i {
+            color: var(--primary-yellow);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 1rem; }
+            .user-stats { width: 100%; justify-content: center; }
+            nav { flex-wrap: wrap; }
+            .add-task-form { flex-direction: column; }
+            .notes-grid { grid-template-columns: 1fr; }
+            .sticker-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* Achievement Badge */
+        .achievement {
+            position: fixed;
+            top: 100px;
+            right: -300px;
+            background: linear-gradient(135deg, var(--primary-yellow), var(--soft-orange));
+            padding: 20px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: right 0.5s ease;
+            z-index: 1500;
+            border: 3px solid white;
+        }
+
+        .achievement.show {
+            right: 30px;
+        }
+
+        .achievement-icon {
+            font-size: 3rem;
+        }
+
+        .achievement-text h4 {
+            color: var(--earth-brown);
+            margin-bottom: 4px;
+        }
+
+        .achievement-text p {
+            color: var(--earth-brown);
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+
+    <!-- Achievement Notification -->
+    <div class="achievement" id="achievement">
+        <div class="achievement-icon">🏆</div>
+        <div class="achievement-text">
+            <h4>Achievement Unlocked!</h4>
+            <p id="achievement-text">Completed 5 tasks!</p>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-coins"></i>
+        <span id="toast-message">+10 coins earned!</span>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <a href="#" class="logo" onclick="showSection('todos')">
+            <i class="fas fa-leaf"></i>
+            JustStudyDude
+        </a>
+        <div class="user-stats">
+            <div class="streak-display">
+                <i class="fas fa-fire"></i>
+                <span id="streak-count">3</span> day streak
+            </div>
+            <div class="coin-display" onclick="showSection('shop')">
+                <i class="fas fa-coins"></i>
+                <span id="coin-count">150</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <button class="nav-btn active" onclick="showSection('todos')">
+            <i class="fas fa-check-circle"></i>
+            Tasks
+        </button>
+        <button class="nav-btn" onclick="showSection('notes')">
+            <i class="fas fa-sticky-note"></i>
+            Notes
+        </button>
+        <button class="nav-btn" onclick="showSection('shop')">
+            <i class="fas fa-store"></i>
+            Sticker Shop
+        </button>
+        <button class="nav-btn" onclick="showSection('stats')">
+            <i class="fas fa-chart-line"></i>
+            Progress
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Todos Section -->
+        <section id="todos" class="section active">
+            <h2><i class="fas fa-tasks"></i> My Study Tasks</h2>
+            <div class="todo-container">
+                <form class="add-task-form" onsubmit="addTask(event)">
+                    <input type="text" class="task-input" id="taskInput" placeholder="What do you need to study? (e.g., 'Math Chapter 5')" required>
+                    <input type="text" class="task-input" id="taskDescInput" placeholder="Add details (optional)...">
+                    <button type="submit" class="add-btn">
+                        <i class="fas fa-plus"></i>
+                        Add Task
+                    </button>
+                </form>
+                <ul class="task-list" id="taskList">
+                    <!-- Tasks will be loaded here -->
+                </ul>
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h3>No tasks yet!</h3>
+                    <p>Add your first study task above to get started 🌱</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Notes Section -->
+        <section id="notes" class="section">
+            <h2><i class="fas fa-book"></i> Smart Notes</h2>
+            
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" id="uploadArea">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Drop files here or click to upload</h3>
+                <p>Supports PDF, PPT, Images (PNG, JPG)</p>
+                <input type="file" class="file-input" id="fileInput" accept=".pdf,.ppt,.pptx,image/*" onchange="handleFileSelect(event)">
+            </div>
+
+            <div class="notes-grid" id="notesGrid">
+                <button class="add-note-btn" onclick="createEmptyNote()">
+                    <i class="fas fa-plus-circle"></i>
+                    Create New Note
+                </button>
+                <!-- Notes will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Shop Section -->
+        <section id="shop" class="section">
+            <div class="shop-container">
+                <div class="shop-header">
+                    <h2><i class="fas fa-shopping-bag"></i> Sticker Shop</h2>
+                    <div class="coin-display">
+                        <i class="fas fa-coins"></i>
+                        <span id="shop-coin-count">150</span>
+                    </div>
+                </div>
+                <p style="margin-bottom: 1.5rem; color: var(--text-light);">
+                    Buy stickers with your earned coins and decorate your notes! Complete tasks to earn more coins. 🎯
+                </p>
+                <div class="sticker-grid" id="stickerGrid">
+                    <!-- Stickers will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section id="stats" class="section">
+            <h2><i class="fas fa-trophy"></i> Your Progress</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Tasks Completed</div>
+                    <div class="stat-value" id="completed-count">0</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="task-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="stat-card yellow">
+                    <div class="stat-label">Current Streak</div>
+                    <div class="stat-value" id="stats-streak">3</div>
+                    <p style="margin-top: 8px; color: var(--text-light); font-size: 0.9rem;">
+                        Keep it up! 🔥
+                    </p>
+                </div>
+                <div class="stat-card orange">
+                    <div class="stat-label">Total Coins</div>
+                    <div class="stat-value" id="stats-coins">150</div>
+                    <p style="margin-top: 8px; color: var(--text-light); font-size: 0.9rem;">
+                        Spend them in the shop! 🛍️
+                    </p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Study Notes</div>
+                    <div class="stat-value" id="stats-notes">0</div>
+                    <p style="margin-top: 8px; color: var(--text-light); font-size: 0.9rem;">
+                        Notes created 📚
+                    </p>
+                </div>
+            </div>
+
+            <div class="todo-container" style="margin-top: 2rem;">
+                <h3 style="color: var(--dark-green); margin-bottom: 1rem;">
+                    <i class="fas fa-medal"></i> Recent Achievements
+                </h3>
+                <div id="achievements-list" style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="padding: 16px; background: var(--light-green); border-radius: 12px; display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 2rem;">🌟</span>
+                        <div>
+                            <div style="font-weight: 700; color: var(--dark-green);">First Steps</div>
+                            <div style="font-size: 0.9rem; color: var(--text-light);">Created your first task</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Sticker Modal -->
+    <div class="modal" id="stickerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Sticker</h3>
+                <button class="close-btn" onclick="closeStickerModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <p style="margin-bottom: 1rem; color: var(--text-light);">
+                Click a sticker to add it to your note:
+            </p>
+            <div class="sticker-selector" id="ownedStickers">
+                <!-- Owned stickers will appear here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Management
+        let appData = {
+            coins: 150,
+            streak: 3,
+            tasks: [
+                { id: 1, title: "Review Math Chapter 5", desc: "Focus on quadratic equations and practice problems 1-20", completed: false, expanded: false },
+                { id: 2, title: "Read History Article", desc: "The Industrial Revolution - take notes on key inventors", completed: true, expanded: false }
+            ],
+            notes: [
+                { id: 1, title: "Biology Lecture", content: "Cell structure and function... Mitochondria is the powerhouse of the cell.", date: "2024-01-15", stickers: ["🧬", "🔬"] },
+                { id: 2, title: "Math Formulas", content: "Quadratic formula: x = (-b ± √(b²-4ac)) / 2a", date: "2024-01-14", stickers: ["📐"] }
+            ],
+            stickers: [
+                { id: 1, emoji: "⭐", name: "Star", price: 50, owned: true },
+                { id: 2, emoji: "🔥", name: "Fire", price: 100, owned: false },
+                { id: 3, emoji: "🎯", name: "Target", price: 75, owned: false },
+                { id: 4, emoji: "🚀", name: "Rocket", price: 150, owned: false },
+                { id: 5, emoji: "🧠", name: "Brain", price: 200, owned: false },
+                { id: 6, emoji: "📚", name: "Books", price: 80, owned: true },
+                { id: 7, emoji: "✨", name: "Sparkles", price: 60, owned: false },
+                { id: 8, emoji: "🏆", name: "Trophy", price: 300, owned: false },
+                { id: 9, emoji: "🌱", name: "Sprout", price: 40, owned: true },
+                { id: 10, emoji: "💡", name: "Idea", price: 90, owned: false },
+                { id: 11, emoji: "🎨", name: "Art", price: 70, owned: false },
+                { id: 12, emoji: "🎵", name: "Music", price: 85, owned: false }
+            ],
+            achievements: [
+                { id: 1, title: "First Steps", desc: "Created your first task", icon: "🌟", unlocked: true },
+                { id: 2, title: "Task Master", desc: "Complete 5 tasks", icon: "⭐", unlocked: false }
+            ],
+            currentNoteId: null
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            renderTasks();
+            renderNotes();
+            renderShop();
+            updateStats();
+        });
+
+        // LocalStorage Functions
+        function saveData() {
+            localStorage.setItem('juststudydude_data', JSON.stringify(appData));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('juststudydude_data');
+            if (saved) {
+                appData = JSON.parse(saved);
+                updateUI();
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('coin-count').textContent = appData.coins;
+            document.getElementById('shop-coin-count').textContent = appData.coins;
+            document.getElementById('streak-count').textContent = appData.streak;
+        }
+
+        // Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.closest('.nav-btn').classList.add('active');
+            
+            if (sectionId === 'stats') updateStats();
+        }
+
+        // Task Functions
+        function renderTasks() {
+            const list = document.getElementById('taskList');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (appData.tasks.length === 0) {
+                list.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            list.innerHTML = appData.tasks.map(task => `
+                <li class="task-item ${task.completed ? 'completed' : ''} ${task.expanded ? 'expanded' : ''}" onclick="toggleTaskExpand(${task.id})">
+                    <div class="checkbox ${task.completed ? 'checked' : ''}" onclick="event.stopPropagation(); toggleTask(${task.id})"></div>
+                    <div class="task-content">
+                        <div class="task-title">${escapeHtml(task.title)}</div>
+                        <div class="task-desc">${escapeHtml(task.desc || 'No details added')}</div>
+                    </div>
+                    <i class="fas fa-chevron-down expand-icon"></i>
+                    <button class="delete-btn" onclick="event.stopPropagation(); deleteTask(${task.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </li>
+            `).join('');
+        }
+
+        function addTask(event) {
+            event.preventDefault();
+            const titleInput = document.getElementById('taskInput');
+            const descInput = document.getElementById('taskDescInput');
+            
+            const newTask = {
+                id: Date.now(),
+                title: titleInput.value,
+                desc: descInput.value,
+                completed: false,
+                expanded: false
+            };
+            
+            appData.tasks.unshift(newTask);
+            saveData();
+            renderTasks();
+            
+            titleInput.value = '';
+            descInput.value = '';
+            
+            showToast('Task added! Complete it to earn coins! 🎯');
+            
+            // Check first task achievement
+            if (appData.tasks.length === 1) {
+                unlockAchievement(1);
+            }
+        }
+
+        function toggleTask(id) {
+            const task = appData.tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                
+                if (task.completed) {
+                    // Earn coins
+                    appData.coins += 10;
+                    showToast('+10 coins! Great job! 🎉');
+                    createConfetti();
+                    updateUI();
+                    
+                    // Check achievements
+                    const completedCount = appData.tasks.filter(t => t.completed).length;
+                    if (completedCount >= 5) unlockAchievement(2);
+                }
+                
+                saveData();
+                renderTasks();
+                updateStats();
+            }
+        }
+
+        function toggleTaskExpand(id) {
+            const task = appData.tasks.find(t => t.id === id);
+            if (task) {
+                task.expanded = !task.expanded;
+                renderTasks();
+            }
+        }
+
+        function deleteTask(id) {
+            appData.tasks = appData.tasks.filter(t => t.id !== id);
+            saveData();
+            renderTasks();
+            showToast('Task deleted');
+        }
+
+        // Note Functions
+        function renderNotes() {
+            const grid = document.getElementById('notesGrid');
+            const addButton = grid.firstElementChild;
+            
+            grid.innerHTML = addButton.outerHTML;
+            
+            appData.notes.forEach(note => {
+                const noteEl = document.createElement('div');
+                noteEl.className = 'note-card';
+                noteEl.innerHTML = `
+                    <div class="note-header">
+                        <div class="note-title">${escapeHtml(note.title)}</div>
+                        <div style="display: flex; gap: 8px;">
+                            <button onclick="openStickerModal(${note.id})" style="background: none; border: none; cursor: pointer; font-size: 1.2rem; color: var(--primary-yellow);">
+                                <i class="fas fa-smile"></i>
+                            </button>
+                            <button onclick="deleteNote(${note.id})" style="background: none; border: none; cursor: pointer; font-size: 1.2rem; color: #ef4444;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="note-date">${note.date}</div>
+                    <div class="note-content">${escapeHtml(note.content)}</div>
+                    <div class="note-stickers" id="stickers-${note.id}">
+                        ${note.stickers.map(s => `<span class="sticker">${s}</span>`).join('')}
+                    </div>
+                `;
+                grid.appendChild(noteEl);
+            });
+        }
+
+        function createEmptyNote() {
+            const title = prompt('Enter note title:');
+            if (!title) return;
+            
+            const newNote = {
+                id: Date.now(),
+                title: title,
+                content: 'Click to edit your note content...',
+                date: new Date().toLocaleDateString(),
+                stickers: []
+            };
+            
+            appData.notes.unshift(newNote);
+            saveData();
+            renderNotes();
+            showToast('Note created! Add stickers from the shop! 📝');
+        }
+
+        function deleteNote(id) {
+            appData.notes = appData.notes.filter(n => n.id !== id);
+            saveData();
+            renderNotes();
+        }
+
+        // File Upload Simulation
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            processFiles(files);
+        }
+
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            processFiles(files);
+        }
+
+        function processFiles(files) {
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const content = e.target.result;
+                    const newNote = {
+                        id: Date.now() + Math.random(),
+                        title: file.name.replace(/\.[^/.]+$/, ""),
+                        content: `Generated from ${file.name}...\n\n[Content extracted and summarized automatically. This is a simulated note generation feature.]`,
+                        date: new Date().toLocaleDateString(),
+                        stickers: ["📎"]
+                    };
+                    appData.notes.unshift(newNote);
+                    saveData();
+                    renderNotes();
+                    showToast(`Note created from ${file.name}! 📄`);
+                };
+                
+                if (file.type.startsWith('image/')) {
+                    reader.readAsDataURL(file);
+                } else {
+                    reader.readAsText(file);
+                }
+            });
+        }
+
+        // Shop Functions
+        function renderShop() {
+            const grid = document.getElementById('stickerGrid');
+            grid.innerHTML = appData.stickers.map(sticker => `
+                <div class="sticker-item ${sticker.owned ? 'owned' : ''}" onclick="${sticker.owned ? '' : `buySticker(${sticker.id})`}">
+                    <span class="sticker-emoji">${sticker.emoji}</span>
+                    <div class="sticker-name">${sticker.name}</div>
+                    <div class="sticker-price">
+                        <i class="fas fa-coins"></i>
+                        ${sticker.owned ? 'Owned' : sticker.price}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function buySticker(id) {
+            const sticker = appData.stickers.find(s => s.id === id);
+            if (!sticker || sticker.owned) return;
+            
+            if (appData.coins >= sticker.price) {
+                appData.coins -= sticker.price;
+                sticker.owned = true;
+                saveData();
+                renderShop();
+                updateUI();
+                showToast(`You bought ${sticker.name}! ${sticker.emoji}`);
+                createConfetti();
+            } else {
+                showToast('Not enough coins! Complete tasks to earn more! 💪');
+            }
+        }
+
+        // Sticker Modal
+        function openStickerModal(noteId) {
+            appData.currentNoteId = noteId;
+            const owned = appData.stickers.filter(s => s.owned);
+            const container = document.getElementById('ownedStickers');
+            
+            if (owned.length === 0) {
+                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-light);">No stickers yet! Visit the shop to buy some! 🛍️</p>';
+            } else {
+                container.innerHTML = owned.map(s => `
+                    <div class="sticker-option" onclick="addStickerToNote('${s.emoji}')">
+                        ${s.emoji}
+                    </div>
+                `).join('');
+            }
+            
+            document.getElementById('stickerModal').classList.add('active');
+        }
+
+        function closeStickerModal() {
+            document.getElementById('stickerModal').classList.remove('active');
+            appData.currentNoteId = null;
+        }
+
+        function addStickerToNote(emoji) {
+            if (!appData.currentNoteId) return;
+            
+            const note = appData.notes.find(n => n.id === appData.currentNoteId);
+            if (note) {
+                note.stickers.push(emoji);
+                saveData();
+                renderNotes();
+                closeStickerModal();
+                showToast('Sticker added! 🎨');
+            }
+        }
+
+        // Stats Functions
+        function updateStats() {
+            const completed = appData.tasks.filter(t => t.completed).length;
+            const total = appData.tasks.length;
+            const percent = total > 0 ? (completed / total) * 100 : 0;
+            
+            document.getElementById('completed-count').textContent = completed;
+            document.getElementById('task-progress').style.width = percent + '%';
+            document.getElementById('stats-streak').textContent = appData.streak;
+            document.getElementById('stats-coins').textContent = appData.coins;
+            document.getElementById('stats-notes').textContent = appData.notes.length;
+        }
+
+        // Achievement System
+        function unlockAchievement(id) {
+            const ach = appData.achievements.find(a => a.id === id);
+            if (ach && !ach.unlocked) {
+                ach.unlocked = true;
+                saveData();
+                
+                const badge = document.getElementById('achievement');
+                document.getElementById('achievement-text').textContent = ach.desc;
+                badge.querySelector('.achievement-icon').textContent = ach.icon;
+                badge.classList.add('show');
+                
+                createConfetti();
+                
+                setTimeout(() => {
+                    badge.classList.remove('show');
+                }, 4000);
+            }
+        }
+
+        // Utility Functions
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function createConfetti() {
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = ['#4ade80', '#facc15', '#fb923c', '#166534'][Math.floor(Math.random() * 4)];
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Close modal on outside click
+        document.getElementById('stickerModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeStickerModal();
+        });
+    </script>
+</body>
+</html>
